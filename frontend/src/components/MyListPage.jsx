@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AnimeCard from './AnimeCard';
+import API_BASE_URL from '../api/config';
 
 const MyListPage = () => {
   const [list, setList] = useState([]);
@@ -13,7 +14,7 @@ const MyListPage = () => {
 
   const fetchList = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/mylist');
+      const response = await axios.get(`${API_BASE_URL}/mylist`);
       // Format to match what AnimeCard expects (it uses anime.id, visually)
       const formattedList = response.data.map(item => ({
         id: item.malId,

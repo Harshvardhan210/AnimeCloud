@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Star, ChevronLeft, Plus, Check, Clock, Calendar, Tv } from 'lucide-react';
+import API_BASE_URL from '../api/config';
 import './DetailPage.css';
 
 const DetailPage = () => {
@@ -15,13 +16,13 @@ const DetailPage = () => {
   useEffect(() => {
     const fetchDetailsAndCheck = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/anime?name=${name}`);
+        const response = await axios.get(`${API_BASE_URL}/anime?name=${name}`);
         const animeData = response.data;
         setAnime(animeData);
 
         if (animeData && animeData.id) {
           try {
-            const listRes = await axios.get(`http://localhost:8080/mylist/${animeData.id}`);
+            const listRes = await axios.get(`${API_BASE_URL}/mylist/${animeData.id}`);
             if (listRes.data) {
               setAdded(true);
               setStatus(listRes.data.status || 'Watching');
@@ -46,7 +47,7 @@ const DetailPage = () => {
     
     try {
       if (added) {
-        await axios.delete(`http://localhost:8080/mylist/${anime.id}`);
+        await axios.delete(`${API_BASE_URL}/mylist/${anime.id}`);
         setAdded(false);
       } else {
         const payload = {
@@ -56,7 +57,7 @@ const DetailPage = () => {
           score: anime.score,
           episodes: anime.episodes
         };
-        await axios.post('http://localhost:8080/mylist', payload);
+        await axios.post(`${API_BASE_URL}/mylist`, payload);
         setAdded(true);
       }
     } catch(err) {
@@ -68,7 +69,7 @@ const DetailPage = () => {
     setStatus(newStatus);
     if (!anime || !anime.id || !added) return;
     try {
-      await axios.put(`http://localhost:8080/mylist/${anime.id}/status`, { status: newStatus });
+      await axios.put(`${API_BASE_URL}/mylist/${anime.id}/status`, { status: newStatus });
     } catch (err) {
       console.error('Error updating status:', err);
       alert('Failed to update status.');

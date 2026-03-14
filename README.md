@@ -65,6 +65,25 @@ Open `http://localhost:5173` in your browser.
 
 ---
 
+## 🐳 Docker Setup (Recommended)
+
+The easiest way to run the entire stack is using **Docker Compose**.
+
+### Prerequisites
+- Docker & Docker Compose installed
+
+### Run the App
+```bash
+docker-compose up --build
+```
+
+- **Frontend**: `http://localhost:5173`
+- **Backend**: `http://localhost:8080`
+
+This command will automatically build both the Spring Boot and React images and link them together in a virtual network.
+
+---
+
 ## 👤 Author
 
 **Made by Harshvardhan**

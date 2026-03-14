@@ -7,6 +7,7 @@ import AnimeCard from './components/AnimeCard';
 import DetailPage from './components/DetailPage';
 import MyListPage from './components/MyListPage';
 import MobileMenu from './components/MobileMenu';
+import API_BASE_URL from './api/config';
 import './App.css';
 
 function HomeContent({ searchQuery, recommendations, page, loading, error, handleLoadMore, displayList, canLoadMore, currentGenre }) {
@@ -60,7 +61,7 @@ function App() {
   const fetchRecommendations = async (pageNum, append = false) => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:8080/anime/top?page=${pageNum}`);
+      const response = await axios.get(`${API_BASE_URL}/anime/top?page=${pageNum}`);
       if (append) {
         setRecommendations(prev => [...prev, ...response.data]);
       } else {
@@ -81,7 +82,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`http://localhost:8080/anime?name=${query}`);
+      const response = await axios.get(`${API_BASE_URL}/anime?name=${query}`);
       if (response.data) {
         setSearchResults([response.data]);
       } else {
@@ -99,7 +100,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`http://localhost:8080/anime/genre?genreId=${genre.id}&page=${pageNum}`);
+      const response = await axios.get(`${API_BASE_URL}/anime/genre?genreId=${genre.id}&page=${pageNum}`);
       if (append) {
         setSearchResults(prev => [...prev, ...response.data]);
       } else {

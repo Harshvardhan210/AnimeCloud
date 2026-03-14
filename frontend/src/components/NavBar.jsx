@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Search, Grid, List, LogIn, X, ChevronDown } from 'lucide-react';
+import API_BASE_URL from '../api/config';
 import './NavBar.css';
 
 const NavBar = ({ onSearch, onLogoClick, onGenreSelect, onMyListClick }) => {
@@ -17,7 +18,7 @@ const NavBar = ({ onSearch, onLogoClick, onGenreSelect, onMyListClick }) => {
 
   const fetchGenres = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/anime/genres');
+      const response = await axios.get(`${API_BASE_URL}/anime/genres`);
       setGenres(response.data);
     } catch (err) {
       console.error("Error fetching genres:", err);
