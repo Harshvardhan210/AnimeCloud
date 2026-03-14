@@ -1,0 +1,118 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.anime-section {
+  padding-bottom: 5rem;
+}
+
+.section-header {
+  margin-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.section-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, var(--primary), transparent);
+  opacity: 0.3;
+}
+
+.anime-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 2rem;
+}
+
+.footer {
+  padding: 3rem 0;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.loader {
+  text-align: center;
+  padding: 3rem;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.error-msg {
+  background: rgba(255, 46, 99, 0.1);
+  color: var(--primary);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--primary);
+  font-size: 0.9rem;
+}
+
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
+}
+
+.btn-load-more {
+  background: var(--border);
+  color: var(--text-main);
+  padding: 1rem 3rem;
+  border-radius: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+.btn-load-more:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(255, 46, 99, 0.2);
+}
+
+.loader-sm {
+  text-align: center;
+  margin-top: 2rem;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .section-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .section-line {
+    width: 100px;
+    flex: none;
+    height: 3px;
+    background: var(--primary);
+  }
+
+  .anime-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+    padding: 0 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

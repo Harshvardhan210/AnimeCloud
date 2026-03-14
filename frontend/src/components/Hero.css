@@ -1,0 +1,165 @@
+.hero {
+  min-height: 75vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #080a10;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Start from top to respect padding */
+  align-items: center;
+  padding-top: 120px; /* More generous space to clear navbar and glow */
+  margin-bottom: 2rem;
+}
+
+.hero-slider-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  height: 500px; /* Increased height to prevent clipping 3D cards and glow */
+  perspective: 1200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-slider-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-card-item {
+  position: absolute;
+  width: 200px; /* Small cards */
+  height: 300px;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: 
+    translateX(calc(var(--offset) * 180px))
+    scale(calc(1 - var(--abs-offset) * 0.2))
+    rotateY(calc(var(--offset) * -20deg));
+  cursor: pointer;
+}
+
+.hero-card-glow-wrapper {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  transition: box-shadow 0.6s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* The neon glow for the active card */
+.hero-card-item.active .hero-card-glow-wrapper {
+  box-shadow: 0 0 30px 10px rgba(0, 242, 255, 0.4), 0 0 100px 20px rgba(0, 242, 255, 0.1);
+  border: 2px solid #00f2ff;
+}
+
+.hero-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hero-card-item.active:hover .hero-card-overlay {
+  opacity: 1;
+}
+
+.hero-card-title {
+  color: white;
+  font-size: 0.9rem;
+  margin: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Nav Controls */
+.hero-nav-controls {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  z-index: 100;
+  pointer-events: none;
+}
+
+.hero-nav-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.hero-nav-btn:hover {
+  background: rgba(0, 242, 255, 0.2);
+  color: #00f2ff;
+  transform: scale(1.1);
+}
+
+.hero-dots {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.hero-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hero-dot.active {
+  background: #00f2ff;
+  transform: scale(1.3);
+  box-shadow: 0 0 10px #00f2ff;
+}
+
+@media (max-width: 768px) {
+  .hero-card-item {
+    width: 140px;
+    height: 210px;
+    transform: 
+      translateX(calc(var(--offset) * 110px))
+      scale(calc(1 - var(--abs-offset) * 0.25))
+      rotateY(calc(var(--offset) * -15deg));
+  }
+  
+  .hero-nav-controls {
+     padding: 0 1rem;
+  }
+}
+
