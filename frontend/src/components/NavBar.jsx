@@ -16,6 +16,18 @@ const NavBar = ({ onSearch, onLogoClick, onGenreSelect, onMyListClick }) => {
     }
   }, [isGenresOpen]);
 
+  useEffect(() => {
+    if (!query.trim()) return;
+
+    const handler = setTimeout(() => {
+      if (onSearch) onSearch(query);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [query, onSearch]);
+
   const fetchGenres = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/anime/genres`);

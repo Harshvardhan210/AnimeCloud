@@ -1,14 +1,23 @@
+import React, { useState } from 'react';
 import { Star, Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './AnimeCard.css';
 
 const AnimeCard = ({ anime }) => {
   const navigate = useNavigate();
+  const [isLoaded, setIsLoaded] = useState(false);
 
   return (
     <div className="anime-card" onClick={() => navigate(`/anime/${anime.title}`)}>
       <div className="card-image">
-        <img src={anime.poster} alt={anime.title} />
+        {!isLoaded && <div className="skeleton-placeholder"></div>}
+        <img 
+          src={anime.poster} 
+          alt={anime.title} 
+          loading="lazy"
+          onLoad={() => setIsLoaded(true)}
+          className={isLoaded ? 'loaded' : 'loading'}
+        />
         <div className="card-hover">
           <button className="btn-info-sm">
             <Info size={20} />

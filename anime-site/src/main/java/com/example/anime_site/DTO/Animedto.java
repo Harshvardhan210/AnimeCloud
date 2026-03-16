@@ -1,5 +1,7 @@
 package com.example.anime_site.DTO;
 
+import java.util.List;
+
 public class Animedto {
 
     private Integer id;
@@ -9,13 +11,12 @@ public class Animedto {
     private Integer episodes;
     private Integer year;
     private String type;
-    private String synopsis;
+    private List<String> genres;
 
     public Animedto() {
     }
 
-    public Animedto(Integer id, String title, String poster, Double score, Integer episodes, Integer year, String type,
-            String synopsis) {
+    public Animedto(Integer id, String title, String poster, Double score, Integer episodes, Integer year, String type, List<String> genres) {
         this.id = id;
         this.title = title;
         this.poster = poster;
@@ -23,7 +24,7 @@ public class Animedto {
         this.episodes = episodes;
         this.year = year;
         this.type = type;
-        this.synopsis = synopsis;
+        this.genres = genres;
     }
 
     public Integer getId() {
@@ -82,17 +83,17 @@ public class Animedto {
         this.type = type;
     }
 
-    public String getSynopsis() {
-        return synopsis;
+    public List<String> getGenres() {
+        return genres;
     }
 
-    public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
+    public void setGenres(List<String> genres) {
+        this.genres = genres;
     }
 
     @Override
     public String toString() {
         return "Animedto [id=" + id + ", title=" + title + ", poster=" + poster + ", score=" + score
-                + ", episodes=" + episodes + ", year=" + year + ", type=" + type + ", synopsis=" + synopsis + "]";
+                + ", episodes=" + episodes + ", year=" + year + ", type=" + type + ", genres=" + genres + "]";
     }
 }

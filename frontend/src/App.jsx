@@ -7,6 +7,7 @@ import AnimeCard from './components/AnimeCard';
 import DetailPage from './components/DetailPage';
 import MyListPage from './components/MyListPage';
 import MobileMenu from './components/MobileMenu';
+import SkeletonCard from './components/SkeletonCard';
 import API_BASE_URL from './api/config';
 import './App.css';
 
@@ -22,7 +23,13 @@ function HomeContent({ searchQuery, recommendations, page, loading, error, handl
           <div className="section-line"></div>
         </div>
 
-        {loading && page === 1 && <div className="loader">Loading recommendations...</div>}
+        {loading && displayList.length === 0 && (
+          <div className="anime-grid">
+            {[...Array(8)].map((_, i) => (
+              <SkeletonCard key={`skeleton-${i}`} />
+            ))}
+          </div>
+        )}
         
         <div className="anime-grid">
           {displayList.map((anime, index) => (
@@ -75,22 +82,26 @@ function App() {
     }
   };
 
-  const handleSearch = async (query) => {
+  const fetchSearchResults = async (query, pageNum, append = false) => {
     if (!query) return;
     setSearchQuery(query);
     setCurrentGenre(null); // Reset genre if searching by name
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`${API_BASE_URL}/anime?name=${query}`);
-      if (response.data) {
-        setSearchResults([response.data]);
+      const response = await axios.get(`${API_BASE_URL}/anime?name=${query}&page=${pageNum}`);
+      if (append) {
+        setSearchResults(prev => [...prev, ...response.data]);
       } else {
-        setSearchResults([]);
+        setSearchResults(response.data);
+      }
+      setPage(pageNum);
+      if (response.data.length === 0 && !append) {
         setError("No anime found with that name.");
       }
     } catch (err) {
       console.error("Error fetching search results:", err);
+      setError("Search failed. Jikan API might be slow.");
     } finally {
       setLoading(false);
     }
@@ -121,6 +132,8 @@ function App() {
     const nextPage = page + 1;
     if (currentGenre) {
       fetchByGenre(currentGenre, nextPage, true);
+    } else if (searchQuery && !currentGenre) {
+      fetchSearchResults(searchQuery, nextPage, true);
     } else if (!searchQuery) {
       setPage(nextPage);
       fetchRecommendations(nextPage, true);
@@ -143,16 +156,17 @@ function App() {
 
   const displayList = searchQuery ? searchResults : recommendations;
 
-  // Show "See More" if it's top recommendations OR genre results (up to ~50 total if possible)
+  // Show "See More" if it's top recommendations, genre results, or search results (up to ~50 total if possible)
   const canLoadMore = !loading && (
     (!searchQuery && recommendations.length > 0) || 
-    (currentGenre && searchResults.length > 0 && searchResults.length < 50)
+    (currentGenre && searchResults.length > 0 && searchResults.length < 50) ||
+    (searchQuery && !currentGenre && searchResults.length > 0 && searchResults.length < 50)
   );
 
   return (
     <Router>
       <div className="app">
-        <NavBarWrapper onSearch={handleSearch} onHome={handleHome} onGenreSelect={handleGenreSelect} />
+        <NavBarWrapper onSearch={(q) => fetchSearchResults(q, 1, false)} onHome={handleHome} onGenreSelect={handleGenreSelect} />
         
         <main>
           <Routes>

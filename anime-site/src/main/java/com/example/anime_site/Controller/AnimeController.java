@@ -22,8 +22,8 @@ public class AnimeController {
     }
 
     @GetMapping
-    public Animedto getAnime(@RequestParam String name){
-        return animeService.getAnime(name);
+    public List<Animedto> getAnime(@RequestParam String name, @RequestParam(defaultValue = "1") int page) {
+        return animeService.searchAnime(name, page);
     }
 
     @GetMapping("/top")

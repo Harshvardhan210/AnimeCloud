@@ -1,37 +1,49 @@
 package com.example.anime_site.Service;
 
-import org.springframework.web.client.RestTemplate;
-import java.util.List;
-import java.util.Map;
-import org.springframework.stereotype.Service;
 import com.example.anime_site.DTO.Animedto;
 import com.example.anime_site.DTO.Genredto;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service
 public class AnimeService {
 
-    public Animedto getAnime(String name) {
-        String url = "https://api.jikan.moe/v4/anime?q=" + name;
-        RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+
+    public AnimeService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    @Cacheable(value = "animeSearch", key = "#name + '-' + #page")
+    public List<Animedto> searchAnime(String name, int page) {
+        String url = "https://api.jikan.moe/v4/anime?q=" + name + "&page=" + page + "&limit=12";
         try {
             Map<String, Object> response = restTemplate.getForObject(url, Map.class);
             List<Map<String, Object>> data = (List<Map<String, Object>>) response.get("data");
 
             if (data == null || data.isEmpty()) {
-                return null;
+                return List.of();
             }
 
-            return mapToDto(data.get(0));
+            return data.stream()
+                       .map(this::mapToDto)
+                       .toList();
         } catch (Exception e) {
             System.err.println("API Rate limit or error: " + e.getMessage());
-            return null;
+            return List.of();
         }
     }
 
+    @Cacheable(value = "topAnime", key = "#page")
     public List<Animedto> getRecommendations(int page) {
         String url = "https://api.jikan.moe/v4/top/anime?page=" + page;
-        RestTemplate restTemplate = new RestTemplate();
         try {
             Map<String, Object> response = restTemplate.getForObject(url, Map.class);
             List<Map<String, Object>> data = (List<Map<String, Object>>) response.get("data");
@@ -50,9 +62,9 @@ public class AnimeService {
         }
     }
 
+    @Cacheable(value = "animeByGenre", key = "#genreId + '-' + #page")
     public List<Animedto> getAnimeByGenre(int genreId, int page) {
         String url = "https://api.jikan.moe/v4/anime?genres=" + genreId + "&page=" + page + "&order_by=score&sort=desc";
-        RestTemplate restTemplate = new RestTemplate();
         try {
             Map<String, Object> response = restTemplate.getForObject(url, Map.class);
             List<Map<String, Object>> data = (List<Map<String, Object>>) response.get("data");
@@ -71,9 +83,9 @@ public class AnimeService {
     }
 
 
+    @Cacheable(value = "genres", key = "'all'")
     public List<Genredto> getGenres() {
         String url = "https://api.jikan.moe/v4/genres/anime";
-        RestTemplate restTemplate = new RestTemplate();
         try {
             Map<String, Object> response = restTemplate.getForObject(url, Map.class);
             List<Map<String, Object>> data = (List<Map<String, Object>>) response.get("data");
@@ -109,7 +121,16 @@ public class AnimeService {
         dto.setEpisodes((Integer) anime.get("episodes"));
         dto.setYear((Integer) anime.get("year"));
         dto.setType((String) anime.get("type"));
-        dto.setSynopsis((String) anime.get("synopsis"));
+
+        List<Map<String, Object>> genresList = (List<Map<String, Object>>) anime.get("genres");
+        if (genresList != null) {
+            List<String> genreNames = genresList.stream()
+                    .map(g -> (String) g.get("name"))
+                    .collect(Collectors.toList());
+            dto.setGenres(genreNames);
+        } else {
+            dto.setGenres(new ArrayList<>());
+        }
 
         return dto;
     }
