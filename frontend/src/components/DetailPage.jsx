@@ -6,7 +6,7 @@ import API_BASE_URL from '../api/config';
 import './DetailPage.css';
 
 const DetailPage = () => {
-  const { name } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const [anime, setAnime] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -16,7 +16,7 @@ const DetailPage = () => {
   useEffect(() => {
     const fetchDetailsAndCheck = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/anime?name=${name}`);
+        const response = await axios.get(`${API_BASE_URL}/anime/${id}`);
         const animeData = response.data;
         setAnime(animeData);
 
@@ -40,7 +40,7 @@ const DetailPage = () => {
       }
     };
     fetchDetailsAndCheck();
-  }, [name]);
+  }, [id]);
 
   const toggleMyList = async () => {
     if (!anime || !anime.id) return;
@@ -76,7 +76,11 @@ const DetailPage = () => {
     }
   };
   if (loading) return <div className="loader container">Fetching anime data...</div>;
-  if (!anime) return <div className="error-msg container">Anime not found.</div>;
+  
+  if (!anime || Object.keys(anime).length === 0 || !anime.title) {
+    console.log("Anime data missing or invalid:", anime);
+    return <div className="error-msg container">Anime not found or data is incomplete.</div>;
+  }
 
   return (
     <div className="detail-page container">

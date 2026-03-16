@@ -58,7 +58,7 @@ const Hero = ({ animeList }) => {
                   pointerEvents: isActive ? 'auto' : 'none',
                   visibility: absOffset > 3 ? 'hidden' : 'visible'
                 }}
-                onClick={() => isActive && navigate(`/anime/${anime.title}`)}
+                onClick={() => isActive && navigate(`/anime/${anime.id}`)}
               >
                 <div className="hero-card-glow-wrapper">
                   <img src={anime.poster} alt={anime.title} className="hero-card-img" />

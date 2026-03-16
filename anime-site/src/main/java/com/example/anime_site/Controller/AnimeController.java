@@ -40,4 +40,9 @@ public class AnimeController {
     public List<Animedto> getAnimeByGenre(@RequestParam int genreId, @RequestParam(defaultValue = "1") int page) {
         return animeService.getAnimeByGenre(genreId, page);
     }
+
+    @GetMapping("/{id}")
+    public Animedto getAnimeById(@org.springframework.web.bind.annotation.PathVariable int id) {
+        return animeService.getAnimeById(id);
+    }
 }

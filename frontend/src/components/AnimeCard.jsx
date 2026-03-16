@@ -8,7 +8,7 @@ const AnimeCard = ({ anime }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <div className="anime-card" onClick={() => navigate(`/anime/${anime.title}`)}>
+    <div className="anime-card" onClick={() => navigate(`/anime/${anime.id}`)}>
       <div className="card-image">
         {!isLoaded && <div className="skeleton-placeholder"></div>}
         <img 

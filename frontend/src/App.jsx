@@ -183,7 +183,7 @@ function App() {
                 currentGenre={currentGenre}
               />
             } />
-            <Route path="/anime/:name" element={<DetailPage />} />
+            <Route path="/anime/:id" element={<DetailPage />} />
             <Route path="/mylist" element={<MyListPage />} />
           </Routes>
         </main>

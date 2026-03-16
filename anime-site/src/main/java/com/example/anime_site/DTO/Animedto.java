@@ -1,8 +1,10 @@
 package com.example.anime_site.DTO;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Animedto {
+public class Animedto implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private Integer id;
     private String title;
@@ -12,11 +14,12 @@ public class Animedto {
     private Integer year;
     private String type;
     private List<String> genres;
+    private String synopsis;
 
     public Animedto() {
     }
 
-    public Animedto(Integer id, String title, String poster, Double score, Integer episodes, Integer year, String type, List<String> genres) {
+    public Animedto(Integer id, String title, String poster, Double score, Integer episodes, Integer year, String type, List<String> genres, String synopsis) {
         this.id = id;
         this.title = title;
         this.poster = poster;
@@ -25,6 +28,7 @@ public class Animedto {
         this.year = year;
         this.type = type;
         this.genres = genres;
+        this.synopsis = synopsis;
     }
 
     public Integer getId() {
@@ -89,6 +93,14 @@ public class Animedto {
 
     public void setGenres(List<String> genres) {
         this.genres = genres;
+    }
+
+    public String getSynopsis() {
+        return synopsis;
+    }
+
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
     }
 
     @Override

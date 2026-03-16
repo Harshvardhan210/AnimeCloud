@@ -103,6 +103,20 @@ public class AnimeService {
         }
     }
 
+    @Cacheable(value = "animeById", key = "#id")
+    public Animedto getAnimeById(int id) {
+        String url = "https://api.jikan.moe/v4/anime/" + id;
+        try {
+            Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+            Map<String, Object> data = (Map<String, Object>) response.get("data");
+            if (data == null) return null;
+            return mapToDto(data);
+        } catch (Exception e) {
+            System.err.println("Error fetching anime by ID: " + e.getMessage());
+            return null;
+        }
+    }
+
     private Animedto mapToDto(Map<String, Object> anime) {
         Animedto dto = new Animedto();
         dto.setId((Integer) anime.get("mal_id"));
@@ -121,6 +135,7 @@ public class AnimeService {
         dto.setEpisodes((Integer) anime.get("episodes"));
         dto.setYear((Integer) anime.get("year"));
         dto.setType((String) anime.get("type"));
+        dto.setSynopsis((String) anime.get("synopsis"));
 
         List<Map<String, Object>> genresList = (List<Map<String, Object>>) anime.get("genres");
         if (genresList != null) {
